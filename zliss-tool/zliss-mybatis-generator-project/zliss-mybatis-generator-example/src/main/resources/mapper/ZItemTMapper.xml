@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.zgenerator.test.project.repository.ZItemTRepository" >
+
+    <resultMap id="BaseResultMap" type="com.example.zgenerator.test.project.entity.ZItemT" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        `id`, `type`, `url`, `status`
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.example.zgenerator.test.project.entity.ZItemT" >
+        select <include refid="Base_Column_List" />
+        from z_item_t
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" parameterType="com.example.zgenerator.test.project.entity.ZItemT" keyProperty="id" useGeneratedKeys="true" >
+        insert into z_item_t
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                `id`,
+            </if>
+            <if test="type != null" >
+                `type`,
+            </if>
+            <if test="url != null" >
+                `url`,
+            </if>
+            <if test="status != null" >
+                `status`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null" >
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.example.zgenerator.test.project.entity.ZItemT" >
+        update z_item_t
+        <set>
+            <if test="type != null" >
+                `type`= #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null" >
+                `url`= #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                `status`= #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="com.example.zgenerator.test.project.entity.ZItemT" >
+        delete from 
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <sql id="Select_Where_Clause" >
+        1 = 1
+            <if test="zItemT.id != null" >
+                and `id` = #{zItemT.id,jdbcType=BIGINT}
+            </if>
+            <if test="zItemT.type != null" >
+                and `type` = #{zItemT.type,jdbcType=VARCHAR}
+            </if>
+            <if test="zItemT.url != null" >
+                and `url` = #{zItemT.url,jdbcType=VARCHAR}
+            </if>
+            <if test="zItemT.status != null" >
+                and `status` = #{zItemT.status,jdbcType=TINYINT}
+            </if>
+    </sql>
+
+    <select id="selectCount" resultType="java.lang.Integer" >
+        select count(*) from z_item_t
+        where <include refid="Select_Where_Clause" />
+    </select>
+
+    <select id="selectPage" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from z_item_t
+        where <include refid="Select_Where_Clause" />
+        <if test="pageable.sort != null" >
+            order by
+            <foreach collection="pageable.sort" item="order" separator="," >
+                <if test="
+order.property == 'id' ||
+order.property == 'type' ||
+order.property == 'url' ||
+order.property == 'status'
+" >
+                    ${order.property} ${order.direction}
+                </if>
+            </foreach>
+        </if>
+        <if test="pageable.offset >= 0 and pageable.pageSize > 0" >
+            limit ${pageable.offset}, ${pageable.pageSize}
+        </if>
+    </select>
+</mapper>

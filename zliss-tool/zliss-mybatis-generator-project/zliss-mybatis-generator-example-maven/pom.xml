@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>zliss-tool</artifactId>
+        <groupId>net.zliss</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>zliss-mybatis-generator-example-maven</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.zliss</groupId>
+                <artifactId>zliss-mybatis-generator-maven</artifactId>
+                <version>0.0.1</version>
+                <configuration>
+                    <url>jdbc:mysql://mysqlhost.com:3306/ztest?connectTimeout=5000</url>
+                    <user>root</user>
+                    <password>123456</password>
+                    <tables>z_user,z_item</tables>
+                    <!-- mac -->
+                    <projectPath>${basedir}/src/main</projectPath>
+                    <parentPkg>com.example.zgenerator.test.project</parentPkg>
+                    <!-- custom setting -->
+<!--                    <entityDirPathFull>${basedir}/src/main/java/com/example/zgenerator/test/project/entity</entityDirPathFull>-->
+<!--                    <entityPkgFull>com.example.zgenerator.test.project.entity</entityPkgFull>-->
+<!--                    <repositoryDirPathFull>${basedir}/src/main/java/com/example/zgenerator/test/project/repository</repositoryDirPathFull>-->
+<!--                    <repositoryPkgFull>com.example.zgenerator.test.project.repository</repositoryPkgFull>-->
+<!--                    <mapperDirPathFull>${basedir}/src/main/resources/mapper</mapperDirPathFull>-->
+<!--                    <remarkFormat>// DatabaseType:{{type}}, DatabaseDefault:{{default}}, DatabaseRemark:{{remark}}</remarkFormat>-->
+<!--                    <entityTemplatePath>${basedir}/src/main/resources/mybatis/entity.vm</entityTemplatePath>-->
+<!--                    <repositoryTemplatePath>${basedir}/src/main/resources/mybatis/repository.vm</repositoryTemplatePath>-->
+<!--                    <mapperTemplatePath>${basedir}/src/main/resources/mybatis/mapper.vm</mapperTemplatePath>-->
+
+                    <!-- windows -->
+<!--                    <projectPath>${basedir}\src\main</projectPath>-->
+
+<!--                    <methods>insert,updateByPrimaryKey,selectCount,selectPage</methods>-->
+<!--                    <jdbcJavaTypeMapJson>{-6:{"type":"Integer"}}</jdbcJavaTypeMapJson>-->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>zliss-maven-repository</id>
+            <url>https://raw.githubusercontent.com/zliss/zliss-maven-repository/mvn-repo</url>
+        </pluginRepository>
+    </pluginRepositories>
+</project>

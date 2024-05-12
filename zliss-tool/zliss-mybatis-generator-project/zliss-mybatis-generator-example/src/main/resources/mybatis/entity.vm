@@ -1,0 +1,19 @@
+package $!{templateData.daoPkg};
+$!{templateData.daoImport}
+public class $!{templateData.daoClassName} {
+
+#foreach($!{fieldInfo} in $!{templateData.fieldInfoList})
+    private $!{fieldInfo.fieldType} $!{fieldInfo.fieldName};$!{fieldInfo.fieldRemark}
+#end
+
+#foreach($!{fieldInfo} in $!{templateData.fieldInfoList})
+    public void set$!{fieldInfo.fieldNameFirstUpper}($!{fieldInfo.fieldType} $!{fieldInfo.fieldName}){
+		this.$!{fieldInfo.fieldName} = $!{fieldInfo.fieldName};
+	}
+
+	public $!{fieldInfo.fieldType} get$!{fieldInfo.fieldNameFirstUpper}(){
+		return this.$!{fieldInfo.fieldName};
+	}
+
+#end
+}

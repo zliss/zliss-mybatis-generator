@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.zgenerator.test.project.repository.ZUserRepository" >
+
+    <resultMap id="BaseResultMap" type="com.example.zgenerator.test.project.entity.ZUser" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="img" property="img" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        `id`, `phone`, `name`, `img`, `status`
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.example.zgenerator.test.project.entity.ZUser" >
+        select <include refid="Base_Column_List" />
+        from z_user
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" parameterType="com.example.zgenerator.test.project.entity.ZUser" keyProperty="id" useGeneratedKeys="true" >
+        insert into z_user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                `id`,
+            </if>
+            <if test="phone != null" >
+                `phone`,
+            </if>
+            <if test="name != null" >
+                `name`,
+            </if>
+            <if test="img != null" >
+                `img`,
+            </if>
+            <if test="status != null" >
+                `status`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="phone != null" >
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="img != null" >
+                #{img,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.example.zgenerator.test.project.entity.ZUser" >
+        update z_user
+        <set>
+            <if test="phone != null" >
+                `phone`= #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                `name`= #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="img != null" >
+                `img`= #{img,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                `status`= #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="com.example.zgenerator.test.project.entity.ZUser" >
+        delete from 
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <sql id="Select_Where_Clause" >
+        1 = 1
+            <if test="zUser.id != null" >
+                and `id` = #{zUser.id,jdbcType=BIGINT}
+            </if>
+            <if test="zUser.phone != null" >
+                and `phone` = #{zUser.phone,jdbcType=VARCHAR}
+            </if>
+            <if test="zUser.name != null" >
+                and `name` = #{zUser.name,jdbcType=VARCHAR}
+            </if>
+            <if test="zUser.img != null" >
+                and `img` = #{zUser.img,jdbcType=VARCHAR}
+            </if>
+            <if test="zUser.status != null" >
+                and `status` = #{zUser.status,jdbcType=TINYINT}
+            </if>
+    </sql>
+
+    <select id="selectCount" resultType="java.lang.Integer" >
+        select count(*) from z_user
+        where <include refid="Select_Where_Clause" />
+    </select>
+
+    <select id="selectPage" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from z_user
+        where <include refid="Select_Where_Clause" />
+        <if test="pageable.sort != null" >
+            order by
+            <foreach collection="pageable.sort" item="order" separator="," >
+                <if test="
+order.property == 'id' ||
+order.property == 'phone' ||
+order.property == 'name' ||
+order.property == 'img' ||
+order.property == 'status'
+" >
+                    ${order.property} ${order.direction}
+                </if>
+            </foreach>
+        </if>
+        <if test="pageable.offset >= 0 and pageable.pageSize > 0" >
+            limit ${pageable.offset}, ${pageable.pageSize}
+        </if>
+    </select>
+</mapper>

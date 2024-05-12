@@ -1,0 +1,38 @@
+package $!{templateData.repositoryPkg};
+
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Pageable;
+$!{templateData.repositoryImport}
+
+@Repository
+public interface $!{templateData.repositoryClassName} {
+
+#foreach($!{methodStr} in $!{templateData.methodStrList})
+#if($methodStr == 'selectByPrimaryKey' && $templateData.primaryKeyFieldName != '')
+    $!{templateData.getDaoClassName()} selectByPrimaryKey(${templateData.getPrimaryKeyFieldType()} ${templateData.getPrimaryKeyFieldName()});
+
+#end
+#if($methodStr == 'insert')
+    int insert(${templateData.getDaoClassName()} ${templateData.getDaoObjectName()});
+
+#end
+#if($methodStr == 'updateByPrimaryKey' && $templateData.primaryKeyFieldName != '')
+    int updateByPrimaryKey(${templateData.getDaoClassName()} ${templateData.getDaoObjectName()});
+
+#end
+#if($methodStr == 'deleteByPrimaryKey' && $templateData.primaryKeyFieldName != '')
+    int deleteByPrimaryKey(${templateData.getDaoClassName()} ${templateData.getDaoObjectName()});
+
+#end
+#if($methodStr == 'selectCount')
+    int selectCount(@Param("${templateData.getDaoObjectName()}") ${templateData.getDaoClassName()} ${templateData.getDaoObjectName()});
+
+#end
+#if($methodStr == 'selectPage')
+    List<${templateData.getDaoClassName()}> selectPage(@Param("${templateData.getDaoObjectName()}") ${templateData.getDaoClassName()} ${templateData.getDaoObjectName()}, @Param("pageable") Pageable pageable);
+
+#end
+#end
+}

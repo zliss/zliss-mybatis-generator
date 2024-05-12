@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="$!{templateData.repositoryReference}" >
+
+    <resultMap id="BaseResultMap" type="$!{templateData.daoReference}" >
+#foreach($!{fieldInfo} in $!{templateData.fieldInfoList})
+        <$!{fieldInfo.columnType} column="$!{fieldInfo.columnName}" property="$!{fieldInfo.fieldName}" jdbcType="$!{fieldInfo.jdbcType}" />
+#end
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+#foreach($!{fieldInfo} in $!{templateData.fieldInfoList})
+#if($foreach.index == 0)        `$!{fieldInfo.columnName}`#{else}, `$!{fieldInfo.columnName}`#{end}
+#end
+
+    </sql>
+
+#set($selectWhereClauseRender = false)
+#foreach($!{methodStr} in $!{templateData.methodStrList})
+#if($methodStr == 'selectByPrimaryKey' && $templateData.primaryKeyColName != '')
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="$!{templateData.daoReference}" >
+        select <include refid="Base_Column_List" />
+        from $!{templateData.tableName}
+        where $!{templateData.primaryKeyColName} = #{$!{templateData.primaryKeyFieldName},jdbcType=$!{templateData.primaryKeyJdbcType}}
+    </select>
+
+#end
+#if($methodStr == 'insert')
+    <insert id="insert" parameterType="$!{templateData.daoReference}" #if($templateData.primaryKeyColName != '')keyProperty="$templateData.primaryKeyFieldName" useGeneratedKeys="true" #{end}>
+        insert into $!{templateData.tableName}
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+#foreach($!{fieldInfo} in $!{templateData.fieldInfoList})
+            <if test="$!{fieldInfo.fieldName} != null" >
+                `$!{fieldInfo.columnName}`,
+            </if>
+#end
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+#foreach($!{fieldInfo} in $!{templateData.fieldInfoList})
+            <if test="$!{fieldInfo.fieldName} != null" >
+                #{$!{fieldInfo.fieldName},jdbcType=$!{fieldInfo.jdbcType}},
+            </if>
+#end
+        </trim>
+    </insert>
+
+#end
+#if($methodStr == 'updateByPrimaryKey' && $templateData.primaryKeyColName != '')
+    <update id="updateByPrimaryKey" parameterType="$!{templateData.daoReference}" >
+        update $!{templateData.tableName}
+        <set>
+#foreach($!{fieldInfo} in $!{templateData.fieldInfoList})
+#if($fieldInfo.columnName != ${templateData.primaryKeyColName})
+            <if test="$!{fieldInfo.fieldName} != null" >
+                `$!{fieldInfo.columnName}`= #{$!{fieldInfo.fieldName},jdbcType=$!{fieldInfo.jdbcType}},
+            </if>
+#end
+#end
+        </set>
+        where $!{templateData.primaryKeyColName} = #{$!{templateData.primaryKeyFieldName},jdbcType=$!{templateData.primaryKeyJdbcType}}
+    </update>
+
+#end
+#if($methodStr == 'deleteByPrimaryKey' && $templateData.primaryKeyColName != '')
+    <delete id="deleteByPrimaryKey" parameterType="$!{templateData.daoReference}" >
+        delete from $!{$templateData.tableName}
+        where $!{templateData.primaryKeyColName} = #{$!{templateData.primaryKeyFieldName},jdbcType=$!{templateData.primaryKeyJdbcType}}
+    </delete>
+
+#end
+#if($methodStr == 'selectCount' || $methodStr == 'selectPage')
+#if($selectWhereClauseRender == false)
+    <sql id="Select_Where_Clause" >
+        1 = 1
+#foreach($!{fieldInfo} in $!{templateData.fieldInfoList})
+            <if test="${templateData.getDaoObjectName()}.$!{fieldInfo.fieldName} != null" >
+                and `$!{fieldInfo.columnName}` = #{${templateData.getDaoObjectName()}.$!{fieldInfo.fieldName},jdbcType=$!{fieldInfo.jdbcType}}
+            </if>
+#end
+    </sql>
+
+#set($selectWhereClauseRender = true)
+#end
+#end
+#if($methodStr == 'selectCount')
+    <select id="selectCount" resultType="java.lang.Integer" >
+        select count(*) from $!{templateData.tableName}
+        where <include refid="Select_Where_Clause" />
+    </select>
+
+#end
+#if($methodStr == 'selectPage')
+    <select id="selectPage" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from $!{templateData.tableName}
+        where <include refid="Select_Where_Clause" />
+        <if test="pageable.sort != null" >
+            order by
+            <foreach collection="pageable.sort" item="order" separator="," >
+                <if test="
+#foreach($!{fieldInfo} in $!{templateData.fieldInfoList})
+#if($foreach.index != $templateData.fieldInfoList.size() - 1)
+order.property == '$!{fieldInfo.columnName}' ||
+#else
+order.property == '$!{fieldInfo.columnName}'
+#end
+#end
+" >
+                    ${order.property} ${order.direction}
+                </if>
+            </foreach>
+        </if>
+        <if test="pageable.offset >= 0 and pageable.pageSize > 0" >
+            limit ${pageable.offset}, ${pageable.pageSize}
+        </if>
+    </select>
+#end
+#end
+</mapper>
