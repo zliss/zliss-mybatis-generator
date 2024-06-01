@@ -36,7 +36,7 @@ repositories {
 * Step2
 ```groovy
 dependencies {
-    compile 'net.zliss:zliss-mybatis-generator:0.0.1'
+    compile 'com.github.zliss.zliss-mybatis-generator:zliss-mybatis-generator:0.0.1'
 }
 ```
 
