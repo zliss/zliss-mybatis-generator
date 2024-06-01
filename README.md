@@ -1,5 +1,7 @@
 # zliss-mybatis-generator
 
+[![](https://jitpack.io/v/zliss/zliss-mybatis-generator.svg)](https://jitpack.io/#zliss/zliss-mybatis-generator)
+
 ## Get it
 
 ### Jitpack
@@ -16,7 +18,7 @@ Maven
 * Step2
 ```xml
 <dependency>
-    <groupId>net.zliss</groupId>
+    <groupId>com.github.zliss.zliss-mybatis-generator</groupId>
     <artifactId>zliss-mybatis-generator</artifactId>
     <version>0.0.1</version>
 </dependency>
